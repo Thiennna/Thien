@@ -1,0 +1,25 @@
+---
+- name: Kết nối và quản lý AP Aruba
+  hosts: aruba_aps
+  gather_facts: no
+  connection: network_cli
+  tasks:
+    - name: Kiểm tra kết nối với AP Aruba
+      arubanetworks.aos_switch.aos_switch_command:
+        commands:
+          - show version
+      register: version_info
+
+    - name: Hiển thị thông tin phiên bản
+      debug:
+        var: version_info.stdout_lines
+
+    - name: Lấy cấu hình hiện tại của AP Aruba
+      arubanetworks.aos_switch.aos_switch_command:
+        commands:
+          - show running-config
+      register: running_config
+
+    - name: Hiển thị cấu hình hiện tại
+      debug:
+        var: running_config.stdout_lines
